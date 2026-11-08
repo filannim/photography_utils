@@ -1,0 +1,10 @@
+{
+  "name": "Photo Utils",
+  "short_name": "Photo Utils",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#17243d",
+  "description": "Offline tools for inspecting used camera bodies and lenses.",
+  "icons": [{"src":"assets/logo.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
