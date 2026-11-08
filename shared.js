@@ -2,11 +2,11 @@
   'use strict';
 
   const translations = {
-    it: { name: 'Italiano', home: 'Home', body: 'Body Inspector', lens: 'Lens Inspector', language: 'Lingua', newInspection: 'Nuova ispezione', export: 'Esporta JSON', import: 'Importa JSON', report: 'Rapporto PDF', all: 'Tutti i controlli', open: 'Apri strumento', offline: 'Offline e senza tracciamento', inspect: 'Verifica prima di acquistare.' },
-    en: { name: 'English', home: 'Home', body: 'Body Inspector', lens: 'Lens Inspector', language: 'Language', newInspection: 'New inspection', export: 'Export JSON', import: 'Import JSON', report: 'PDF report', all: 'All checks', open: 'Open tool', offline: 'Offline and no tracking', inspect: 'Inspect before you buy.' },
-    es: { name: 'Español', home: 'Inicio', body: 'Body Inspector', lens: 'Lens Inspector', language: 'Idioma', newInspection: 'Nueva inspección', export: 'Exportar JSON', import: 'Importar JSON', report: 'Informe PDF', all: 'Todos los controles', open: 'Abrir herramienta', offline: 'Sin conexión y sin seguimiento', inspect: 'Comprueba antes de comprar.' },
-    de: { name: 'Deutsch', home: 'Startseite', body: 'Body Inspector', lens: 'Lens Inspector', language: 'Sprache', newInspection: 'Neue Prüfung', export: 'JSON exportieren', import: 'JSON importieren', report: 'PDF-Bericht', all: 'Alle Prüfungen', open: 'Tool öffnen', offline: 'Offline und ohne Tracking', inspect: 'Prüfe vor dem Kauf.' },
-    zh: { name: '简体中文', home: '首页', body: 'Body Inspector', lens: 'Lens Inspector', language: '语言', newInspection: '新建检查', export: '导出 JSON', import: '导入 JSON', report: 'PDF 报告', all: '全部检查', open: '打开工具', offline: '离线使用且无跟踪', inspect: '购买前先检查。' }
+    it: { flag: '🇮🇹', name: 'Italiano', home: 'Home', body: 'Body Inspector', lens: 'Lens Inspector', language: 'Lingua', newInspection: 'Nuova ispezione', export: 'Esporta JSON', import: 'Importa JSON', report: 'Rapporto PDF', all: 'Tutti i controlli', open: 'Apri strumento', offline: 'Offline e senza tracciamento', inspect: 'Verifica prima di acquistare.' },
+    en: { flag: '🇬🇧', name: 'English', home: 'Home', body: 'Body Inspector', lens: 'Lens Inspector', language: 'Language', newInspection: 'New inspection', export: 'Export JSON', import: 'Import JSON', report: 'PDF report', all: 'All checks', open: 'Open tool', offline: 'Offline and no tracking', inspect: 'Inspect before you buy.' },
+    es: { flag: '🇪🇸', name: 'Español', home: 'Inicio', body: 'Body Inspector', lens: 'Lens Inspector', language: 'Idioma', newInspection: 'Nueva inspección', export: 'Exportar JSON', import: 'Importar JSON', report: 'Informe PDF', all: 'Todos los controles', open: 'Abrir herramienta', offline: 'Sin conexión y sin seguimiento', inspect: 'Comprueba antes de comprar.' },
+    de: { flag: '🇩🇪', name: 'Deutsch', home: 'Startseite', body: 'Body Inspector', lens: 'Lens Inspector', language: 'Sprache', newInspection: 'Neue Prüfung', export: 'JSON exportieren', import: 'JSON importieren', report: 'PDF-Bericht', all: 'Alle Prüfungen', open: 'Tool öffnen', offline: 'Offline und ohne Tracking', inspect: 'Prüfe vor dem Kauf.' },
+    zh: { flag: '🇨🇳', name: '简体中文', home: '首页', body: 'Body Inspector', lens: 'Lens Inspector', language: '语言', newInspection: '新建检查', export: '导出 JSON', import: '导入 JSON', report: 'PDF 报告', all: '全部检查', open: '打开工具', offline: '离线使用且无跟踪', inspect: '购买前先检查。' }
   };
 
   const localeKey = () => localStorage.getItem('photo-utils-locale') || document.documentElement.lang || 'it';
@@ -16,7 +16,7 @@
   function logoMarkup() { return '<img src="assets/logo.svg" alt="Photo Utils" width="42" height="42">'; }
   function switcherMarkup(tool) {
     const current = localeKey();
-    return `<nav class="pu-switcher" aria-label="${t('home')}"><a href="index.html">${t('home')}</a><a href="body_inspector.html" ${tool === 'body' ? 'aria-current="page"' : ''}>${t('body')}</a><a href="lens_inspector.html" ${tool === 'lens' ? 'aria-current="page"' : ''}>${t('lens')}</a><div class="pu-language"><label for="pu-locale">${t('language')}</label><select id="pu-locale" aria-label="${t('language')}">${Object.entries(translations).map(([key, value]) => `<option value="${key}" ${key === current ? 'selected' : ''}>${value.name}</option>`).join('')}</select></div></nav>`;
+    return `<nav class="pu-switcher" aria-label="${t('home')}"><a href="index.html">${t('home')}</a><a href="body_inspector.html" ${tool === 'body' ? 'aria-current="page"' : ''}>${t('body')}</a><a href="lens_inspector.html" ${tool === 'lens' ? 'aria-current="page"' : ''}>${t('lens')}</a><div class="pu-language"><label for="pu-locale">${t('language')}</label><select id="pu-locale" aria-label="${t('language')}">${Object.entries(translations).map(([key, value]) => `<option value="${key}" ${key === current ? 'selected' : ''}>${value.flag} ${value.name}</option>`).join('')}</select></div></nav>`;
   }
   function illustrationKind(card) {
     const value = `${card.dataset.id || ''} ${card.dataset.category || ''}`.toLowerCase();
