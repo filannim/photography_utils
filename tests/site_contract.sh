@@ -54,6 +54,32 @@ for (const [catalog, keys] of Object.entries(required)) {
     test(typeof catalogs[catalog][locale][key] === 'string' && catalogs[catalog][locale][key].length > 0, `${catalog}.${locale}.${key}`);
   }
 }
+const html = file => fs.readFileSync(file, 'utf8');
+const text = value => value.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ').trim();
+const extracted = new Set();
+for (const file of ['body_inspector.html', 'lens_inspector.html']) {
+  const source = html(`${require('path').dirname(process.argv[2])}/${file}`);
+  for (const match of source.matchAll(/<div class="test-copy">[\s\S]*?<p>([\s\S]*?)<\/p>/g)) extracted.add(text(match[1]));
+  for (const match of source.matchAll(/<li>([\s\S]*?)<\/li>/g)) extracted.add(text(match[1]));
+  for (const match of source.matchAll(/<div class="help-side">[\s\S]*?<p>([\s\S]*?)<\/p>/g)) extracted.add(text(match[1]));
+  for (const match of source.matchAll(/<section class="financial">[\s\S]*?<div class="panel-h">([\s\S]*?)<\/div>/g)) extracted.add(text(match[1]));
+  for (const match of source.matchAll(/<section class="financial">[\s\S]*?<span>([\s\S]*?)<\/span>/g)) if (text(match[1]) !== '€') extracted.add(text(match[1]));
+  for (const match of source.matchAll(/<section class="financial">[\s\S]*?<b>([\s\S]*?)<\/b>/g)) extracted.add(text(match[1]));
+  for (const match of source.matchAll(/<section class="financial">[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/g)) extracted.add(text(match[1]));
+  for (const match of source.matchAll(/<div class="profile-heading">[\s\S]*?<h2>([\s\S]*?)<\/h2>/g)) extracted.add(text(match[1]));
+  for (const match of source.matchAll(/<div class="profile-heading">[\s\S]*?<div class="subnote">([\s\S]*?)<\/div>/g)) extracted.add(text(match[1]));
+  for (const match of source.matchAll(/<section class="intro-panel">[\s\S]*?<p>([\s\S]*?)<\/p>/g)) extracted.add(text(match[1]));
+}
+for (const key of extracted) {
+  test(catalogs.operationalTranslations.it[key] === key, `operationalTranslations.it.${key}`);
+  for (const locale of ['en', 'es', 'de', 'zh']) {
+    const value = catalogs.operationalTranslations[locale][key];
+    test(typeof value === 'string' && value.length > 0, `operationalTranslations.${locale}.${key}`);
+    test(!/^\s*(EN|ES|DE|ZH):/.test(value), `operationalTranslations.${locale}.${key} has no placeholder`);
+    test(value !== key, `operationalTranslations.${locale}.${key} is localized`);
+  }
+}
+test(catalogs.operationalTranslations.zh["Su DSLR non azionare lo specchio a mano: usa soltanto la procedura di ispezione prevista dal produttore e una batteria carica."], 'zh distinctive DSLR instruction');
 function test(value, message) {
   if (!value) throw new Error(`catalog coverage: ${message}`);
 }
